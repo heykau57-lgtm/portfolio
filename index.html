@@ -1,1007 +1,565 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Wa'ie — Coding • AI • Web Development</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; media-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#0c0c0e">
+<meta name="description" content="Portfolio Wa'ie — developer web, AI, bot &amp; automasi.">
+<meta property="og:title" content="Wa'ie – Portfolio">
+<meta property="og:description" content="Developer yang minat website, AI, aplikasi dan automasi.">
+<meta property="og:type" content="website">
+<title>Wa’ie – Portfolio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg-1:#020409;
-    --bg-2:#050d1c;
-    --bg-3:#071733;
-    --glass:rgba(255,255,255,0.045);
-    --stroke:rgba(255,255,255,0.11);
-    --blue:#2563eb;
-    --text:#e6ecf8;
-    --muted:#7f92b3;
-  }
+:root{
+  color-scheme:dark;
+  --bg:#0c0c0e; --card:#151518; --card2:#1b1b1f; --line:#2a2a30;
+  --text:#f2f2f4; --muted:#8d8d98; --accent:#ff6a3d; --accent-soft:rgba(255,106,61,.14);
+  --ok:#34d399; --glow:rgba(255,106,61,.4);
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:12px}
+body{margin:0;background:var(--bg);color:var(--text);overflow-y:auto;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+a:visited{color:inherit}
+h1,h2,h3,p{margin:0}
+main{max-width:560px;margin:0 auto;padding:14px 14px 120px}
+.page{display:none}
+.page.on{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:12px}
+.pad{padding:16px}
+h2{font-size:15px;font-weight:700;margin-bottom:12px}
+.sub{color:var(--muted);font-size:13px}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:'Inter',sans-serif;
-    color:var(--text);
-    background:
-      radial-gradient(1100px 750px at 10% -10%, rgba(37,99,235,0.14), transparent 60%),
-      radial-gradient(900px 700px at 100% 25%, rgba(11,30,77,0.55), transparent 60%),
-      radial-gradient(700px 600px at 50% 115%, rgba(37,99,235,0.10), transparent 60%),
-      linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
-    background-attachment:fixed;
-    min-height:100vh;
-    overflow-x:hidden;
-    line-height:1.65;
-    -webkit-font-smoothing:antialiased;
-  }
-  body.loading{overflow:hidden}
+/* aksesibiliti */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip-link{position:absolute;left:8px;top:-60px;z-index:100;background:var(--accent);color:#fff;
+  padding:10px 14px;border-radius:10px;font-weight:700;font-size:14px;transition:top .2s}
+.skip-link:focus{top:calc(env(safe-area-inset-top,0px) + 8px)}
 
-  body::before{
-    content:"";
-    position:fixed;inset:0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-    background-size:52px 52px;
-    mask-image:radial-gradient(circle at 50% 30%, #000 30%, transparent 75%);
-    pointer-events:none;
-    z-index:0;
-  }
+/* loading screen */
+.loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .55s ease,visibility .55s ease}
+.loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.loader-inner{text-align:center;width:220px}
+.loader-logo{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:16px}
+.loader-logo span{color:var(--accent)}
+.loader-bar{height:2px;background:var(--line);border-radius:999px;overflow:hidden}
+.loader-fill{height:100%;width:0%;background:var(--accent);border-radius:999px;transition:width .25s ease}
+.loader-text{font-size:12px;color:var(--muted);margin-top:10px;font-variant-numeric:tabular-nums;letter-spacing:.04em}
 
-  #particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+/* profil */
+.hero{position:relative}
+.cover{height:180px;border-radius:15px 15px 0 0;overflow:hidden;position:relative;background:#101013}
+.cover img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;display:block}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,12,14,.25),rgba(12,12,14,.0) 40%,rgba(21,21,24,.9))}
+.avatar{position:absolute;left:50%;top:132px;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;
+  object-fit:cover;border:4px solid var(--card);box-shadow:0 0 0 2px var(--accent),0 0 22px var(--glow);
+  image-rendering:-webkit-optimize-contrast; image-rendering:high-quality;
+  animation:floatAvatar 6s ease-in-out infinite; will-change:transform;}
+@keyframes floatAvatar {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-8px); }
+}
+.who{text-align:center;padding:58px 16px 16px}
+.who h1{font-size:23px;font-weight:800;letter-spacing:-.01em}
+.status{display:inline-flex;gap:7px;align-items:center;color:var(--ok);font-size:13px;font-weight:500;margin-top:2px}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.acts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px 16px}
+.act{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:14px;
+  background:var(--card2);border:1px solid var(--line);color:var(--accent);font-size:12px;font-weight:700;transition:background .2s}
+.act span{color:var(--text)}
+.act:active{background:var(--accent-soft)}
+.row{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .i{color:var(--muted);margin-top:2px}
+.row b{display:block;font-weight:500;font-size:14.5px}
+.row small{color:var(--muted);font-size:12.5px}
+.quote{padding:16px 18px;border-left:3px solid var(--accent);font-size:14.5px}
+.quote small{display:block;color:var(--muted);margin-top:6px}
 
-  .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 22px}
+/* projek */
+.folders{display:flex;gap:6px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none}
+.folders::-webkit-scrollbar{display:none}
+.folders button{flex:none;font:inherit;font-size:13px;font-weight:700;color:var(--muted);background:var(--card);
+  border:1px solid var(--line);padding:8px 16px;border-radius:999px;cursor:pointer;transition:all .2s}
+.folders button.on{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.chat{display:flex;gap:12px;align-items:center;padding:13px 14px;border-top:1px solid var(--line)}
+.chat:first-child{border-top:0}
+.ava{width:48px;height:48px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-weight:800;font-size:16px;color:#fff}
+.chat .tx{flex:1;min-width:0}
+.chat h3{font-size:15px;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.chat h3 em{font-style:normal;font-size:11.5px;font-weight:500;color:var(--muted);white-space:nowrap}
+.chat p{color:var(--muted);font-size:13.5px;line-height:1.45}
+.chat .go{color:var(--accent);font-weight:700;font-size:12px}
+.chat[hidden]{display:none}
 
-  /* ===== LOADING SCREEN ===== */
-  #loader{
-    position:fixed;inset:0;z-index:9999;
-    background:linear-gradient(180deg,#020409 0%, #050d1c 55%, #071733 100%);
-    display:flex;align-items:center;justify-content:center;flex-direction:column;
-    transition:opacity 0.7s ease, visibility 0.7s ease;
-  }
-  #loader.hide{opacity:0;visibility:hidden}
-  .loader-logo{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:clamp(38px,7vw,64px);
-    font-weight:700;color:#fff;letter-spacing:-1.5px;
-    margin-bottom:38px;
-    text-shadow:
-      0 0 8px rgba(255,255,255,0.85),
-      0 0 26px rgba(255,255,255,0.5),
-      0 0 60px rgba(37,99,235,0.8);
-    animation:logoPulse 1.6s ease-in-out infinite;
-  }
-  @keyframes logoPulse{
-    0%,100%{opacity:0.75;transform:scale(0.98)}
-    50%{opacity:1;transform:scale(1.03)}
-  }
-  .loader-bar{
-    width:min(260px, 60vw);height:3px;border-radius:99px;
-    background:rgba(255,255,255,0.08);overflow:hidden;position:relative;
-    border:1px solid rgba(255,255,255,0.1);
-  }
-  .loader-bar-fill{
-    position:absolute;inset:0;
-    width:0%;
-    background:linear-gradient(90deg, rgba(255,255,255,0.6), #fff, rgba(37,99,235,0.9));
-    box-shadow:0 0 12px rgba(255,255,255,0.85), 0 0 26px rgba(37,99,235,0.9);
-    transition:width 0.25s ease;
-  }
-  .loader-text{
-    margin-top:18px;
-    font-family:'Space Grotesk',sans-serif;
-    font-size:11px;letter-spacing:4px;text-transform:uppercase;
-    color:#5b7fc4;
-  }
+/* skill */
+#radar{display:block;width:100%;max-width:320px;height:auto;margin:0 auto;overflow:visible}
+#radar text{fill:var(--muted);font-size:11px;font-family:inherit;font-weight:500}
+.lv{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.lv div{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;
+  font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.lv b{font-size:11.5px;color:var(--accent);font-weight:700}
 
-  /* ===== NAV ===== */
-  nav{
-    position:sticky;top:0;z-index:50;
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    background:rgba(2,4,9,0.6);
-    border-bottom:1px solid var(--stroke);
-  }
-  .nav-inner{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:14px 22px;max-width:1120px;margin:0 auto;gap:14px;
-  }
-  .brand{
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:700;font-size:19px;letter-spacing:0.5px;
-    color:#fff;flex-shrink:0;
-    text-shadow:0 0 6px rgba(255,255,255,0.6), 0 0 18px rgba(37,99,235,0.45);
-  }
-  .nav-links{display:flex;gap:26px;list-style:none;align-items:center}
-  .nav-links a{
-    color:var(--muted);text-decoration:none;font-size:13.5px;
-    font-weight:500;letter-spacing:0.3px;transition:.25s;
-  }
-  .nav-links a:hover{
-    color:#fff;
-    text-shadow:0 0 8px rgba(255,255,255,0.85), 0 0 16px rgba(37,99,235,0.6);
-  }
+/* pautan */
+.link{display:flex;align-items:center;gap:14px;padding:13px 16px;border-top:1px solid var(--line);transition:background .2s}
+.link:hover{background:var(--card2)}
+.link:first-child{border-top:0}
+.ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:none}
+.link .tx{flex:1;min-width:0}
+.link b{display:block;font-size:15px;font-weight:700}
+.link small{color:var(--muted);font-size:12.5px}
+.link>.i{color:var(--muted);width:18px;height:18px}
+.btn{display:flex;justify-content:center;align-items:center;gap:8px;font-weight:700;font-size:14.5px;
+  padding:14px 16px;border-radius:14px;background:var(--accent);color:#fff;transition:background .2s}
+.btn:hover{background:#ff7d54}
+.btn:visited{color:#fff}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:18px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
-  /* music controls container */
-  .music-controls{
-    display:flex;align-items:center;gap:10px;
-    padding:6px 12px 6px 6px;border-radius:14px;
-    border:1px solid var(--stroke);
-    background:rgba(255,255,255,0.035);
-    backdrop-filter:blur(12px);
-  }
-  .music-btn{
-    width:34px;height:34px;border-radius:10px;
-    border:none;
-    background:rgba(255,255,255,0.05);
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;transition:.3s;padding:0;flex-shrink:0;
-  }
-  .music-btn svg{width:15px;height:15px;stroke:#cfdcf5;transition:.3s}
-  .music-btn:hover{
-    background:rgba(255,255,255,0.1);
-    box-shadow:0 0 18px rgba(255,255,255,0.4);
-  }
-  .music-btn:hover svg{stroke:#fff}
-  .music-btn.playing{
-    box-shadow:0 0 22px rgba(255,255,255,0.55), 0 0 40px rgba(37,99,235,0.6);
-    background:rgba(255,255,255,0.12);
-    animation:pulseBtn 1.6s ease-in-out infinite;
-  }
-  @keyframes pulseBtn{50%{box-shadow:0 0 12px rgba(255,255,255,0.3)}}
+/* muzik (dikemaskini) */
+.player{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.now{font-size:13px;color:var(--muted);margin-bottom:4px}
+.now b{color:var(--text);font-weight:700}
+.seek-row{display:flex;align-items:center;gap:10px;margin:8px 0 12px;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.seek{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:999px;background:var(--line);outline:none;cursor:pointer}
+.seek::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.seek::-moz-range-thumb{width:14px;height:14px;border:0;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 
-  /* volume slider */
-  .vol-slider{
-    -webkit-appearance:none;appearance:none;
-    width:70px;height:4px;border-radius:99px;
-    background:rgba(255,255,255,0.14);
-    outline:none;cursor:pointer;transition:.3s;
-  }
-  .vol-slider::-webkit-slider-thumb{
-    -webkit-appearance:none;appearance:none;
-    width:12px;height:12px;border-radius:50%;
-    background:#fff;
-    box-shadow:0 0 8px rgba(255,255,255,0.9), 0 0 16px rgba(37,99,235,0.8);
-    cursor:pointer;transition:.2s;
-  }
-  .vol-slider::-webkit-slider-thumb:hover{
-    transform:scale(1.2);
-    box-shadow:0 0 12px #fff, 0 0 22px rgba(37,99,235,1);
-  }
-  .vol-slider::-moz-range-thumb{
-    width:12px;height:12px;border:none;border-radius:50%;
-    background:#fff;
-    box-shadow:0 0 8px rgba(255,255,255,0.9), 0 0 16px rgba(37,99,235,0.8);
-    cursor:pointer;
-  }
+/* Kontrol tengah yang lebih tepat */
+.ctrl{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px}
+.ctrl button{background:var(--card2);border:1px solid var(--line);color:var(--text);width:44px;height:44px;
+  border-radius:50%;display:grid;place-items:center;cursor:pointer;transition:all .2s}
+.ctrl button:hover{background:var(--accent-soft);border-color:var(--accent)}
+.ctrl button.main{width:64px;height:64px;background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 16px var(--glow)}
+.ctrl button.main:hover{background:#ff7d54;transform:scale(1.05)}
+.ctrl button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ctrl button.main svg{width:28px;height:28px}
 
-  /* equalizer bars */
-  .eq{
-    display:flex;align-items:flex-end;gap:2px;height:16px;
-    opacity:0;transition:opacity .3s;
-  }
-  .eq.active{opacity:1}
-  .eq span{
-    width:3px;border-radius:2px;
-    background:linear-gradient(180deg,#fff,rgba(37,99,235,0.9));
-    box-shadow:0 0 6px rgba(255,255,255,0.8), 0 0 12px rgba(37,99,235,0.7);
-    height:4px;
-    animation:eqBounce 1s ease-in-out infinite;
-  }
-  .eq span:nth-child(1){animation-delay:0s}
-  .eq span:nth-child(2){animation-delay:.15s}
-  .eq span:nth-child(3){animation-delay:.3s}
-  .eq span:nth-child(4){animation-delay:.45s}
-  .eq span:nth-child(5){animation-delay:.6s}
-  @keyframes eqBounce{
-    0%,100%{height:4px}
-    50%{height:16px}
-  }
+.vol{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--muted)}
+.vol input{flex:1}
+.playlist{list-style:none;padding:0;margin:0}
+.playlist li{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line);cursor:pointer;font-size:14px;transition:background .2s}
+.playlist li:first-child{border-top:0}
+.playlist li:hover{background:var(--card2)}
+.playlist li.on{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.playlist .n{width:22px;text-align:center;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.playlist li.on .n{color:var(--accent)}
+#playlist-card{display:none} /* Sembunyi secara default kalau tiada lagu */
 
-  @media(max-width:820px){
-    .nav-links a.nav-hide{display:none}
-    .vol-slider{width:55px}
-  }
-  @media(max-width:640px){
-    .nav-links{gap:16px}
-  }
-
-  /* ===== HERO ===== */
-  .hero{
-    min-height:92vh;display:flex;flex-direction:column;justify-content:center;
-    padding:80px 0 60px;
-  }
-  .hero-card{
-    background:var(--glass);
-    border:1px solid var(--stroke);
-    border-radius:26px;
-    padding:56px 46px;
-    backdrop-filter:blur(22px);
-    -webkit-backdrop-filter:blur(22px);
-    box-shadow:
-      0 10px 50px rgba(0,0,0,0.65),
-      inset 0 1px 0 rgba(255,255,255,0.06);
-    position:relative;
-    overflow:hidden;
-  }
-  .hero-card::after{
-    content:"";position:absolute;top:-60%;left:-40%;width:200%;height:200%;
-    background:radial-gradient(circle at 35% 25%, rgba(37,99,235,0.10), transparent 45%);
-    pointer-events:none;
-  }
-  .hero-card.has-photo{
-    display:grid;
-    grid-template-columns:auto 1fr;
-    gap:46px;
-    align-items:center;
-  }
-  @media(max-width:820px){
-    .hero-card.has-photo{
-      grid-template-columns:1fr;
-      gap:34px;
-      text-align:center;
-    }
-    .hero-card.has-photo .cta{justify-content:center}
-    .hero-card.has-photo .bio{margin-left:auto;margin-right:auto}
-  }
-
-  /* ===== PROFILE ===== */
-  .profile-wrap{display:flex;justify-content:center;perspective:1000px}
-  .profile-3d{
-    width:200px;height:200px;
-    border-radius:50%;
-    position:relative;
-    transform-style:preserve-3d;
-    transition:transform 0.15s ease-out;
-    cursor:pointer;
-    animation:floaty 4.5s ease-in-out infinite;
-  }
-  @media(min-width:820px){
-    .profile-3d{width:230px;height:230px}
-  }
-  .profile-3d::before{
-    content:"";position:absolute;inset:-16px;border-radius:50%;
-    background:conic-gradient(
-      from 0deg,
-      rgba(255,255,255,0) 0deg,
-      rgba(255,255,255,0.85) 90deg,
-      rgba(37,99,235,0.9) 180deg,
-      rgba(255,255,255,0) 270deg,
-      rgba(255,255,255,0.85) 360deg
-    );
-    filter:blur(12px);opacity:0.7;z-index:-1;
-    animation:spin 7s linear infinite;
-  }
-  .profile-3d::after{
-    content:"";position:absolute;inset:-4px;border-radius:50%;
-    background:radial-gradient(circle at 30% 25%, rgba(255,255,255,0.4), transparent 60%);
-    z-index:2;pointer-events:none;mix-blend-mode:overlay;
-  }
-  .profile-3d img{
-    width:100%;height:100%;object-fit:cover;border-radius:50%;
-    border:2px solid rgba(255,255,255,0.4);
-    box-shadow:
-      0 0 26px rgba(255,255,255,0.55),
-      0 0 70px rgba(37,99,235,0.7),
-      0 22px 45px rgba(0,0,0,0.65);
-    transform:translateZ(36px);
-    transition:.35s;display:block;
-  }
-  .profile-3d:hover img{
-    box-shadow:
-      0 0 36px rgba(255,255,255,0.9),
-      0 0 100px rgba(37,99,235,0.95),
-      0 26px 55px rgba(0,0,0,0.75);
-  }
-  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  @keyframes spin{to{transform:rotate(360deg)}}
-
-  /* ===== TEXT ===== */
-  .badge{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:11px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;
-    color:#c8d8f5;padding:7px 15px;border-radius:999px;
-    border:1px solid var(--stroke);background:rgba(255,255,255,0.04);
-    margin-bottom:24px;
-  }
-  .badge .dot{
-    width:6px;height:6px;border-radius:50%;background:#fff;
-    box-shadow:0 0 8px #fff,0 0 14px rgba(37,99,235,0.9);
-    animation:pulse 1.8s ease-in-out infinite;
-  }
-  @keyframes pulse{50%{opacity:.35}}
-
-  .hero h1{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:clamp(42px,6.5vw,72px);
-    font-weight:700;line-height:1.05;letter-spacing:-1.5px;
-    color:#fff;
-    text-shadow:
-      0 0 8px rgba(255,255,255,0.85),
-      0 0 24px rgba(255,255,255,0.45),
-      0 0 52px rgba(37,99,235,0.6);
-    margin-bottom:16px;
-  }
-  .tagline{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:clamp(14px,1.9vw,18px);
-    color:#9db4de;font-weight:500;
-    letter-spacing:3px;text-transform:uppercase;
-    margin-bottom:28px;min-height:1.4em;
-  }
-  .tagline .cursor{
-    display:inline-block;width:2px;height:1em;background:#fff;
-    margin-left:4px;vertical-align:-2px;
-    box-shadow:0 0 8px #fff,0 0 16px rgba(37,99,235,0.9);
-    animation:blink 1s steps(2) infinite;
-  }
-  @keyframes blink{50%{opacity:0}}
-
-  .hero p.bio{
-    color:var(--muted);max-width:620px;font-size:15.5px;
-    margin-bottom:36px;line-height:1.75;
-  }
-  .cta{display:flex;gap:14px;flex-wrap:wrap}
-  .btn{
-    padding:13px 26px;border-radius:12px;font-weight:600;font-size:14px;
-    text-decoration:none;transition:.3s;cursor:pointer;
-    border:1px solid var(--stroke);
-    display:inline-flex;align-items:center;gap:9px;
-    font-family:'Inter',sans-serif;
-  }
-  .btn-primary{
-    background:linear-gradient(135deg,rgba(37,99,235,0.35),rgba(11,30,77,0.7));
-    color:#fff;
-    box-shadow:0 0 0 1px rgba(255,255,255,0.05), 0 8px 32px rgba(37,99,235,0.35);
-  }
-  .btn-primary:hover{
-    box-shadow:0 0 0 1px rgba(255,255,255,0.18), 0 0 26px rgba(255,255,255,0.5), 0 8px 40px rgba(37,99,235,0.65);
-    transform:translateY(-2px);
-  }
-  .btn-ghost{
-    background:rgba(255,255,255,0.035);color:#e6ecf8;
-  }
-  .btn-ghost:hover{
-    background:rgba(255,255,255,0.07);
-    box-shadow:0 0 20px rgba(255,255,255,0.35);
-    transform:translateY(-2px);
-  }
-  .btn-wa{
-    background:linear-gradient(135deg,rgba(37,211,102,0.25),rgba(11,77,40,0.5));
-    color:#fff;
-    border-color:rgba(37,211,102,0.35);
-  }
-  .btn-wa:hover{
-    box-shadow:0 0 26px rgba(37,211,102,0.6), 0 8px 40px rgba(37,211,102,0.4);
-    transform:translateY(-2px);
-    border-color:rgba(37,211,102,0.7);
-  }
-
-  /* ===== SECTION ===== */
-  section{padding:95px 0;position:relative}
-  .section-head{margin-bottom:46px}
-  .section-head .kicker{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:11.5px;letter-spacing:3.5px;text-transform:uppercase;
-    color:#5b7fc4;font-weight:600;margin-bottom:10px;
-  }
-  .section-head h2{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:clamp(28px,4vw,40px);font-weight:700;color:#fff;
-    letter-spacing:-0.8px;
-    text-shadow:0 0 12px rgba(255,255,255,0.4), 0 0 30px rgba(37,99,235,0.4);
-  }
-
-  .glass{
-    background:var(--glass);
-    border:1px solid var(--stroke);
-    border-radius:20px;
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-    padding:30px;
-    box-shadow:
-      0 6px 32px rgba(0,0,0,0.55),
-      inset 0 1px 0 rgba(255,255,255,0.06);
-    transition:.35s;
-  }
-  .glass:hover{
-    border-color:rgba(255,255,255,0.24);
-    box-shadow:
-      0 12px 44px rgba(0,0,0,0.65),
-      0 0 26px rgba(255,255,255,0.2),
-      inset 0 1px 0 rgba(255,255,255,0.1);
-    transform:translateY(-4px);
-  }
-
-  /* ABOUT */
-  .about-card p{color:#bfcfe8;font-size:15px;margin-bottom:14px;line-height:1.8}
-  .about-card p:last-child{margin-bottom:0}
-  .about-card .quote{
-    margin-top:22px;padding:16px 20px;
-    border-left:2px solid rgba(255,255,255,0.55);
-    background:rgba(37,99,235,0.08);border-radius:0 14px 14px 0;
-    color:#dbe7fb;font-style:italic;font-size:14.5px;
-    font-family:'Space Grotesk',sans-serif;
-  }
-
-  /* SKILLS */
-  .skills-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
-    gap:16px;
-  }
-  .skill{
-    display:flex;align-items:center;justify-content:center;gap:10px;
-    padding:22px 14px;border-radius:14px;
-    background:var(--glass);
-    border:1px solid var(--stroke);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:600;font-size:14.5px;color:#cfdcf5;
-    transition:.3s;position:relative;overflow:hidden;
-  }
-  .skill svg{width:18px;height:18px;stroke:#8fb0e8;transition:.3s}
-  .skill::before{
-    content:"";position:absolute;inset:0;
-    background:radial-gradient(circle at 50% 0%, rgba(255,255,255,0.12), transparent 60%);
-    opacity:0;transition:.3s;
-  }
-  .skill:hover{
-    transform:translateY(-4px);
-    border-color:rgba(255,255,255,0.3);
-    box-shadow:0 0 24px rgba(255,255,255,0.3), 0 8px 32px rgba(0,0,0,0.55);
-    color:#fff;
-  }
-  .skill:hover svg{stroke:#fff}
-  .skill:hover::before{opacity:1}
-
-  /* PROJECTS */
-  .projects-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:22px;
-  }
-  .project{
-    display:block;
-    text-decoration:none;
-    color:inherit;
-  }
-  .project.clickable{cursor:pointer}
-  .project .icon-wrap{
-    width:42px;height:42px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    background:rgba(37,99,235,0.15);
-    border:1px solid var(--stroke);
-    margin-bottom:18px;transition:.3s;
-  }
-  .project .icon-wrap svg{width:20px;height:20px;stroke:#fff;
-    filter:drop-shadow(0 0 6px rgba(255,255,255,0.6));}
-  .project:hover .icon-wrap{
-    background:rgba(37,99,235,0.28);
-    box-shadow:0 0 22px rgba(255,255,255,0.35);
-  }
-  .project h3{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:19px;font-weight:700;color:#fff;margin-bottom:10px;
-    text-shadow:0 0 10px rgba(255,255,255,0.3);
-  }
-  .project p{color:var(--muted);font-size:14.5px;margin-bottom:16px;line-height:1.7}
-  .project .tag{
-    display:inline-block;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;
-    padding:5px 11px;border-radius:999px;
-    border:1px solid var(--stroke);
-    background:rgba(37,99,235,0.14);color:#9db9ea;font-weight:600;
-    font-family:'Space Grotesk',sans-serif;
-  }
-  .project .open-hint{
-    display:inline-flex;align-items:center;gap:6px;
-    margin-left:10px;font-size:11px;color:#8fb0e8;
-    letter-spacing:1px;text-transform:uppercase;font-weight:600;
-    transition:.3s;
-  }
-  .project:hover .open-hint{color:#fff;text-shadow:0 0 8px rgba(255,255,255,0.8)}
-  .project .open-hint svg{width:12px;height:12px;stroke:currentColor}
-
-  /* CONTACT */
-  .contact-card{text-align:center;padding:52px 34px}
-  .contact-card h2{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:clamp(24px,3.5vw,36px);color:#fff;font-weight:700;
-    margin-bottom:12px;letter-spacing:-0.5px;
-    text-shadow:0 0 12px rgba(255,255,255,0.4), 0 0 30px rgba(37,99,235,0.45);
-  }
-  .contact-card p{color:var(--muted);margin-bottom:32px;font-size:15px}
-  .socials{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
-  .social{
-    display:inline-flex;align-items:center;gap:10px;
-    padding:12px 22px;border-radius:12px;
-    border:1px solid var(--stroke);
-    background:rgba(255,255,255,0.04);
-    color:#e6ecf8;text-decoration:none;font-weight:600;font-size:14px;
-    transition:.3s;backdrop-filter:blur(12px);
-    font-family:'Space Grotesk',sans-serif;
-  }
-  .social svg{width:17px;height:17px;stroke:#cfe0ff;transition:.3s}
-  .social:hover{
-    background:rgba(255,255,255,0.09);
-    border-color:rgba(255,255,255,0.35);
-    box-shadow:0 0 24px rgba(255,255,255,0.45);
-    transform:translateY(-3px);
-    color:#fff;
-  }
-  .social:hover svg{stroke:#fff;filter:drop-shadow(0 0 6px rgba(255,255,255,0.8))}
-
-  .social.wa{
-    border-color:rgba(37,211,102,0.35);
-    background:rgba(37,211,102,0.06);
-  }
-  .social.wa svg{stroke:#5ee88c}
-  .social.wa:hover{
-    border-color:rgba(37,211,102,0.8);
-    background:rgba(37,211,102,0.12);
-    box-shadow:0 0 26px rgba(37,211,102,0.65);
-  }
-  .social.wa:hover svg{stroke:#7dfaa6;filter:drop-shadow(0 0 8px rgba(37,211,102,0.9))}
-
-  footer{
-    border-top:1px solid var(--stroke);
-    padding:32px 22px;text-align:center;
-    color:var(--muted);font-size:13px;
-    background:rgba(2,4,9,0.55);
-    backdrop-filter:blur(10px);
-    font-family:'Space Grotesk',sans-serif;
-    letter-spacing:0.3px;
-  }
-  footer span{color:#fff;text-shadow:0 0 8px rgba(255,255,255,0.65)}
-
-  .reveal{opacity:0;transform:translateY(28px);transition:.85s cubic-bezier(.2,.7,.2,1)}
-  .reveal.show{opacity:1;transform:none}
-
-  @media(max-width:640px){
-    .hero-card{padding:38px 24px;border-radius:22px}
-    section{padding:72px 0}
-    .glass{padding:24px}
-    .profile-3d{width:160px;height:160px}
-  }
+/* nav terapung */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 14px);
+  display:flex;gap:2px;padding:6px;border-radius:999px;background:rgba(21,21,24,.9);border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);z-index:20}
+.nav a{color:var(--muted);font-size:12.5px;font-weight:700;padding:9px 16px;border-radius:999px;transition:color .2s}
+.nav a.on{color:var(--accent);background:var(--accent-soft)}
 </style>
+<noscript><style>.page{display:block!important}.loader{display:none!important}</style></noscript>
 </head>
-<body class="loading">
+<body>
+<a href="#main" class="skip-link">Langkau ke kandungan</a>
 
-<!-- ===== LOADING SCREEN ===== -->
-<div id="loader">
-  <div class="loader-logo">Wa'ie</div>
-  <div class="loader-bar">
-    <div class="loader-bar-fill" id="loaderFill"></div>
+<!-- LOADING SCREEN -->
+<div id="loader" class="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <div class="loader-logo">Wa’ie <span>.</span></div>
+    <div class="loader-bar"><div class="loader-fill" id="loader-fill"></div></div>
+    <div class="loader-text"><span id="loader-percent">0</span>%</div>
   </div>
-  <div class="loader-text" id="loaderText">Loading...</div>
 </div>
 
-<canvas id="particles"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="wa" viewBox="0 0 24 24"><path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6.5A8 8 0 1121 12z"/></symbol>
+  <symbol id="gh" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+  <symbol id="ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></symbol>
+  <symbol id="tt" viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
+  <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+  <symbol id="code" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 10l-2 2 2 2M16 10l2 2-2 2"/></symbol>
+  <symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8V4z"/></symbol>
+  <symbol id="pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol>
+  <symbol id="prev" viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 4v16"/></symbol>
+  <symbol id="next" viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zM19 4v16"/></symbol>
+  <symbol id="repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></symbol>
+  <symbol id="repeat1" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 01-4 4H3M11 10l1-1v6"/></symbol>
+  <symbol id="vol" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5zM15.5 8.5a5 5 0 010 7M19 5a10 10 0 010 14"/></symbol>
+</svg>
 
-<nav>
-  <div class="nav-inner">
-    <div class="brand">Wa'ie</div>
-    <ul class="nav-links">
-      <li><a href="#about" class="nav-hide">About</a></li>
-      <li><a href="#skills" class="nav-hide">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact" class="nav-hide">Contact</a></li>
-      <li>
-        <div class="music-controls">
-          <button class="music-btn" id="musicBtn" aria-label="Toggle music">
-            <svg id="musicIcon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 18V5l12-2v13"/>
-              <circle cx="6" cy="18" r="3"/>
-              <circle cx="18" cy="16" r="3"/>
-            </svg>
-          </button>
-          <div class="eq" id="eq">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <input type="range" class="vol-slider" id="volSlider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
-        </div>
-      </li>
-    </ul>
-  </div>
+<main id="main">
+  <!-- PROFIL -->
+  <section id="p-profil" class="page on" aria-labelledby="h-profil">
+    <h2 id="h-profil" class="sr-only">Profil</h2>
+    <div class="card hero">
+      <div class="cover"><img alt="" src="data:image/webp;base64,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"></div>
+      <img class="avatar" alt="Gambar profil Wa’ie" src="data:image/webp;base64,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">
+      <div class="who">
+        <h1>Wa’ie</h1>
+        <span class="status"><i aria-hidden="true"></i>Terbuka untuk projek</span>
+      </div>
+      <div class="acts">
+        <a class="act" href="https://wa.me/601155913015" target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#wa"/></svg><span>WhatsApp</span></a>
+        <a class="act" href="https://github.com/waiesya346-boop" target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#gh"/></svg><span>GitHub</span></a>
+        <a class="act" href="https://instagram.com/its.me.waie" target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#ig"/></svg><span>Instagram</span></a>
+        <a class="act" href="https://tiktok.com/@waie.0" target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#tt"/></svg><span>TikTok</span></a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row"><svg class="i" aria-hidden="true" focusable="false"><use href="#info"/></svg><div><b>Developer yang minat website, AI, aplikasi dan automasi.</b><small>Bio</small></div></div>
+      <div class="row"><svg class="i" aria-hidden="true" focusable="false"><use href="#code"/></svg><div><b>HTML, CSS, JavaScript, Node.js, Python</b><small>Teknologi utama</small></div></div>
+    </div>
+
+    <div class="card pad">
+      <h2>Tentang saya</h2>
+      <p class="sub" style="margin-bottom:10px">Saya suka meneroka idea baharu dan menjadikannya projek sebenar, daripada laman web dan aplikasi sehinggalah AI dan bot automasi.</p>
+      <p class="sub">Setiap projek ialah peluang untuk belajar, mencuba benda baharu dan menyelesaikan masalah secara kreatif.</p>
+    </div>
+
+    <div class="card quote">
+      My goal is to turn ideas into reality through code, creativity, and technology.
+      <small>Wa’ie</small>
+    </div>
+  </section>
+
+  <!-- PROJEK -->
+  <section id="p-projek" class="page" aria-labelledby="h-projek">
+    <h2 id="h-projek" class="sr-only">Senarai projek</h2>
+    <div class="folders" id="folders" role="group" aria-label="Tapis projek">
+      <button type="button" class="on" data-f="all" aria-pressed="true">Semua</button>
+      <button type="button" data-f="web" aria-pressed="false">Web</button>
+      <button type="button" data-f="ai" aria-pressed="false">AI</button>
+      <button type="button" data-f="bot" aria-pressed="false">Bot</button>
+      <button type="button" data-f="3d" aria-pressed="false">3D</button>
+    </div>
+    <div class="card" id="list">
+      <a class="chat" data-c="web" href="https://waie-music-project.vercel.app/" target="_blank" rel="noopener">
+        <div class="ava" style="background:linear-gradient(140deg,#ff6a3d,#ffb36b)" aria-hidden="true">WM</div>
+        <div class="tx"><h3>Waie Music <em>Web app</em></h3><p>Pemain muzik dengan antaramuka moden. <span class="go">Buka</span></p></div>
+      </a>
+      <div class="chat" data-c="web">
+        <div class="ava" style="background:linear-gradient(140deg,#3b82f6,#60a5fa)" aria-hidden="true">WC</div>
+        <div class="tx"><h3>Web Chat <em>Web app</em></h3><p>Platform chat berasaskan web, moden dan responsif.</p></div>
+      </div>
+      <div class="chat" data-c="ai">
+        <div class="ava" style="background:linear-gradient(140deg,#8b5cf6,#c084fc)" aria-hidden="true">FC</div>
+        <div class="tx"><h3>FluxCore <em>AI</em></h3><p>Projek AI untuk pemprosesan dan automasi tugasan digital.</p></div>
+      </div>
+      <div class="chat" data-c="ai">
+        <div class="ava" style="background:linear-gradient(140deg,#10b981,#34d399)" aria-hidden="true">AI</div>
+        <div class="tx"><h3>AI Pribadi Wa’ie <em>AI</em></h3><p>Pembantu AI peribadi untuk membantu tugasan harian.</p></div>
+      </div>
+      <div class="chat" data-c="bot">
+        <div class="ava" style="background:linear-gradient(140deg,#0ea5e9,#38bdf8)" aria-hidden="true">BT</div>
+        <div class="tx"><h3>Bot Telegram <em>Bot</em></h3><p>Bot arahan Node.js dengan payment gateway dan userbot.</p></div>
+      </div>
+      <div class="chat" data-c="bot">
+        <div class="ava" style="background:linear-gradient(140deg,#16a34a,#4ade80)" aria-hidden="true">BW</div>
+        <div class="tx"><h3>Plugin bot WhatsApp <em>Bot</em></h3><p>Plugin pembuat sticker dan pemuat turun YouTube.</p></div>
+      </div>
+      <div class="chat" data-c="3d">
+        <div class="ava" style="background:linear-gradient(140deg,#ec4899,#f9a8d4)" aria-hidden="true">VR</div>
+        <div class="tx"><h3>Dunia 3D VRM <em>3D</em></h3><p>Web 3D dengan avatar anime VRM yang boleh berbual guna AI.</p></div>
+      </div>
+      <div class="chat" data-c="web">
+        <div class="ava" style="background:linear-gradient(140deg,#f59e0b,#fcd34d)" aria-hidden="true">TC</div>
+        <div class="tx"><h3>TrendCartDeals <em>Web</em></h3><p>Kedai affiliate TikTok dua halaman dengan Supabase.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILL -->
+  <section id="p-skill" class="page" aria-labelledby="h-skill">
+    <div class="card pad">
+      <h2 id="h-skill">Carta kemahiran</h2>
+      <svg id="radar" viewBox="0 0 300 270" role="img" aria-label="Carta radar kemahiran"></svg>
+      <div class="lv" id="lv"></div>
+    </div>
+  </section>
+
+  <!-- MUZIK -->
+  <section id="p-muzik" class="page" aria-labelledby="h-muzik">
+    <h2 id="h-muzik" class="sr-only">Pemain muzik</h2>
+    <div class="player">
+      <div class="now">Sedang dimainkan: <b id="track-name">—</b></div>
+      <div class="seek-row">
+        <span id="cur-time">0:00</span>
+        <input class="seek" id="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Kedudukan lagu">
+        <span id="dur-time">0:00</span>
+      </div>
+      <div class="ctrl">
+        <button type="button" id="btn-prev" aria-label="Lagu sebelum"><svg aria-hidden="true"><use href="#prev"/></svg></button>
+        <button type="button" id="btn-play" class="main" aria-label="Main"><svg aria-hidden="true" id="play-icon"><use href="#play"/></svg></button>
+        <button type="button" id="btn-next" aria-label="Lagu seterusnya"><svg aria-hidden="true"><use href="#next"/></svg></button>
+        <button type="button" id="btn-repeat" aria-label="Mod ulangan"><svg aria-hidden="true" id="rep-icon"><use href="#repeat"/></svg></button>
+      </div>
+      <div class="vol">
+        <svg aria-hidden="true" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"><use href="#vol"/></svg>
+        <input class="seek" id="vol" type="range" min="0" max="100" value="80" aria-label="Kelantangan">
+      </div>
+    </div>
+    <div class="card" id="playlist-card">
+      <div class="pad" style="padding-bottom:0"><h2 style="margin-bottom:8px">Playlist</h2></div>
+      <ul class="playlist" id="playlist"></ul>
+    </div>
+    <audio id="audio" preload="metadata"></audio>
+  </section>
+
+  <!-- PAUTAN -->
+  <section id="p-pautan" class="page" aria-labelledby="h-pautan">
+    <h2 id="h-pautan" class="sr-only">Pautan sosial dan hubungan</h2>
+    <div class="card">
+      <a class="link" href="https://wa.me/601155913015" target="_blank" rel="noopener">
+        <div class="ic" style="background:#16a34a"><svg class="i" aria-hidden="true" focusable="false"><use href="#wa"/></svg></div>
+        <div class="tx"><b>WhatsApp</b><small>Mesej terus</small></div><svg class="i" aria-hidden="true" focusable="false"><use href="#chev"/></svg>
+      </a>
+      <a class="link" href="https://github.com/waiesya346-boop" target="_blank" rel="noopener">
+        <div class="ic" style="background:#3a3a44"><svg class="i" aria-hidden="true" focusable="false"><use href="#gh"/></svg></div>
+        <div class="tx"><b>GitHub</b><small>waiesya346-boop</small></div><svg class="i" aria-hidden="true" focusable="false"><use href="#chev"/></svg>
+      </a>
+      <a class="link" href="https://instagram.com/its.me.waie" target="_blank" rel="noopener">
+        <div class="ic" style="background:linear-gradient(140deg,#f97316,#db2777)"><svg class="i" aria-hidden="true" focusable="false"><use href="#ig"/></svg></div>
+        <div class="tx"><b>Instagram</b><small>its.me.waie</small></div><svg class="i" aria-hidden="true" focusable="false"><use href="#chev"/></svg>
+      </a>
+      <a class="link" href="https://tiktok.com/@waie.0" target="_blank" rel="noopener">
+        <div class="ic" style="background:#111;border:1px solid var(--line)"><svg class="i" aria-hidden="true" focusable="false"><use href="#tt"/></svg></div>
+        <div class="tx"><b>TikTok</b><small>@waie.0</small></div><svg class="i" aria-hidden="true" focusable="false"><use href="#chev"/></svg>
+      </a>
+    </div>
+    <a class="btn" href="https://wa.me/601155913015" target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#wa"/></svg>Mesej di WhatsApp</a>
+    <footer>© 2026 Wa’ie · Dibina dengan kod, kreativiti dan teknologi</footer>
+  </section>
+</main>
+
+<nav class="nav" aria-label="Navigasi utama" id="nav">
+  <a href="#profil" class="on">Profil</a>
+  <a href="#projek">Projek</a>
+  <a href="#muzik">Muzik</a>
+  <a href="#skill">Skill</a>
+  <a href="#pautan">Pautan</a>
 </nav>
 
-<audio id="bgMusic" loop preload="auto">
-  <source src="lagu.mp3" type="audio/mpeg">
-</audio>
-
-<div class="wrap">
-
-  <!-- HERO -->
-  <header class="hero">
-    <div class="hero-card has-photo reveal">
-
-      <div class="profile-wrap">
-        <div class="profile-3d" id="profile3d">
-          <img src="img.png" alt="Wa'ie" />
-        </div>
-      </div>
-
-      <div>
-        <span class="badge"><span class="dot"></span>Available for Projects</span>
-        <h1>Wa'ie</h1>
-        <div class="tagline">
-          <span id="typed"></span><span class="cursor"></span>
-        </div>
-        <p class="bio">
-          Developer yang minat website, AI, aplikasi dan automasi.
-          Mengubah idea menjadi realiti melalui kod, kreativiti dan teknologi.
-        </p>
-        <div class="cta">
-          <a href="#projects" class="btn btn-primary">
-            Lihat Projek
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
-          <a href="https://wa.me/601155913015" target="_blank" class="btn btn-wa">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-            </svg>
-            WhatsApp
-          </a>
-        </div>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-head reveal">
-      <div class="kicker">Tentang Saya</div>
-      <h2>About Me</h2>
-    </div>
-    <div class="glass about-card reveal">
-      <p>Saya seorang developer yang mempunyai minat mendalam dalam dunia teknologi, pengaturcaraan dan inovasi digital. Saya suka meneroka idea baharu serta mengubahnya menjadi projek sebenar melalui pembangunan website, aplikasi, AI dan bot automasi.</p>
-      <p>Saya sentiasa berusaha meningkatkan kemahiran dalam HTML, CSS, JavaScript, Node.js dan teknologi lain. Bagi saya, setiap projek ialah peluang untuk belajar, mencuba sesuatu yang baharu dan menyelesaikan masalah secara kreatif.</p>
-      <p>Saya percaya bahawa untuk menjadi seorang developer yang hebat, kita perlu sentiasa belajar, berani mencuba dan tidak mudah berputus asa apabila menghadapi cabaran.</p>
-      <div class="quote">"My goal is to turn ideas into reality through code, creativity, and technology."</div>
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section id="skills">
-    <div class="section-head reveal">
-      <div class="kicker">Kemahiran</div>
-      <h2>Skills & Tools</h2>
-    </div>
-    <div class="skills-grid">
-      <div class="skill reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        HTML
-      </div>
-      <div class="skill reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L20 7 L20 17 L12 22 L4 17 L4 7 Z"/></svg>
-        CSS
-      </div>
-      <div class="skill reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h.01M15 9h.01M8 15h8"/></svg>
-        JavaScript
-      </div>
-      <div class="skill reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L21 7 L21 17 L12 22 L3 17 L3 7 Z"/><path d="M12 8 v6 M9 11 h6"/></svg>
-        Node.js
-      </div>
-      <div class="skill reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c4 0 4 3 4 5v3c0 1-1 2-2 2h-4c-1 0-2-1-2-2V7c0-2 0-5 4-5z"/><path d="M4 14c0-1 1-2 2-2h12c1 0 2 1 2 2v3c0 2 0 5-4 5h-8c-4 0-4-3-4-5z"/></svg>
-        Python
-      </div>
-      <div class="skill reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
-        REST API
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="section-head reveal">
-      <div class="kicker">Portfolio</div>
-      <h2>Projects</h2>
-    </div>
-    <div class="projects-grid">
-
-      <a class="glass project clickable reveal" href="https://waie-music-project.vercel.app/" target="_blank" rel="noopener">
-        <div class="icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"/>
-            <circle cx="6" cy="18" r="3"/>
-            <circle cx="18" cy="16" r="3"/>
-          </svg>
-        </div>
-        <span class="tag">Music Web App</span>
-        <span class="open-hint">
-          Buka
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </span>
-        <h3 style="margin-top:14px">Waie Music</h3>
-        <p>Web app pemain muzik dengan antaramuka moden. Tekan untuk buka.</p>
-      </a>
-
-      <div class="glass project reveal">
-        <div class="icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </div>
-        <span class="tag">Web App</span>
-        <h3 style="margin-top:14px">Web Chat</h3>
-        <p>Platform chat berasaskan web dengan antaramuka moden dan responsif.</p>
-      </div>
-
-      <div class="glass project reveal">
-        <div class="icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        </div>
-        <span class="tag">AI</span>
-        <h3 style="margin-top:14px">FluxCore</h3>
-        <p>Projek berasaskan AI untuk pemprosesan dan automasi tugasan digital.</p>
-      </div>
-
-      <div class="glass project reveal">
-        <div class="icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>
-        </div>
-        <span class="tag">AI Assistant</span>
-        <h3 style="margin-top:14px">AI Pribadi — Wa'ie</h3>
-        <p>Pembantu AI peribadi yang dibina untuk membantu tugasan harian.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="glass contact-card reveal">
-      <h2>Jom Berhubung</h2>
-      <p>Terbuka untuk kolaborasi, projek atau sekadar bertukar idea.</p>
-      <div class="socials">
-        <a class="social wa" href="https://wa.me/601155913015" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-          </svg>
-          WhatsApp
-        </a>
-        <a class="social" href="https://github.com/waiesya346-boop" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-          GitHub
-        </a>
-        <a class="social" href="https://instagram.com/its.me.waie" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37a4 4 0 1 1-7.914 1.174A4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          Instagram
-        </a>
-        <a class="social" href="https://tiktok.com/@waie.0" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
-          TikTok
-        </a>
-      </div>
-    </div>
-  </section>
-
-</div>
-
-<footer>
-  © 2026 <span>Wa'ie</span> — Built with code, creativity & technology.
-</footer>
-
 <script>
-  /* ===== LOADING SCREEN ===== */
-  const loader = document.getElementById('loader');
-  const fill = document.getElementById('loaderFill');
-  const ltext = document.getElementById('loaderText');
-  const steps = [
-    {p:20, t:'Initializing...'},
-    {p:45, t:'Loading assets...'},
-    {p:70, t:'Preparing interface...'},
-    {p:90, t:'Almost ready...'},
-    {p:100, t:'Welcome'}
-  ];
-  let si = 0;
-  function tick(){
-    if(si >= steps.length){
-      setTimeout(()=>{
-        loader.classList.add('hide');
-        document.body.classList.remove('loading');
-      }, 350);
+(function(){
+  /* ---------- LOADING SCREEN ---------- */
+  var loader=document.getElementById('loader');
+  var fill=document.getElementById('loader-fill');
+  var pct=document.getElementById('loader-percent');
+  var p=0,done=false;
+  var iv=setInterval(function(){
+    if(done)return;
+    p+=Math.random()*12+4;
+    if(p>=95){p=95;clearInterval(iv);}
+    fill.style.width=p+'%';pct.textContent=Math.floor(p);
+  },120);
+  function finishLoad(){
+    if(done)return;done=true;clearInterval(iv);
+    fill.style.width='100%';pct.textContent='100';
+    setTimeout(function(){loader.classList.add('hide')},350);
+  }
+  window.addEventListener('load',finishLoad);
+  setTimeout(finishLoad,4000);
+
+  /* ---------- HASH ROUTING ---------- */
+  var names=['profil','projek','muzik','skill','pautan'];
+  function show(){
+    var h=(location.hash||'#profil').slice(1);
+    if(names.indexOf(h)<0)h='profil';
+    names.forEach(function(n){document.getElementById('p-'+n).classList.toggle('on',n===h)});
+    [].forEach.call(document.querySelectorAll('#nav a'),function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+h)});
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',show);show();
+
+  /* ---------- FILTER PROJEK ---------- */
+  var fs=document.getElementById('folders');
+  fs.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    [].forEach.call(fs.children,function(x){
+      var on=x===b;x.classList.toggle('on',on);
+      x.setAttribute('aria-pressed',on?'true':'false');
+    });
+    [].forEach.call(document.querySelectorAll('#list .chat'),function(c){
+      c.hidden=b.dataset.f!=='all'&&c.dataset.c!==b.dataset.f;
+    });
+  });
+
+  /* ---------- RADAR (Python update ke 78) ---------- */
+  var data=[['HTML',.75,'Baik'],['CSS',.7,'Baik'],['JavaScript',.7,'Baik'],['Node.js',.8,'Kuat'],['Python',.78,'Baik'],['REST API',.6,'Baik']];
+  var svg=document.getElementById('radar'),cx=150,cy=130,R=84,n=data.length,ns='http://www.w3.org/2000/svg';
+  function pt(i,r){var a=-Math.PI/2+i*2*Math.PI/n;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]}
+  function mk(t,at){var el=document.createElementNS(ns,t);for(var k in at)el.setAttribute(k,at[k]);svg.appendChild(el);return el}
+  [.25,.5,.75,1].forEach(function(l){mk('polygon',{points:data.map(function(_,i){return pt(i,R*l).join(',')}).join(' '),fill:'none',stroke:'var(--line)','stroke-width':1})});
+  data.forEach(function(d,i){
+    var p2=pt(i,R);mk('line',{x1:cx,y1:cy,x2:p2[0],y2:p2[1],stroke:'var(--line)','stroke-width':1});
+    var q=pt(i,R+16),t=mk('text',{x:q[0],y:q[1]+4,'text-anchor':q[0]<cx-4?'end':(q[0]>cx+4?'start':'middle')});t.textContent=d[0];
+  });
+  mk('polygon',{points:data.map(function(d,i){return pt(i,R*d[1]).join(',')}).join(' '),fill:'var(--accent)','fill-opacity':.22,stroke:'var(--accent)','stroke-width':2,'stroke-linejoin':'round'});
+  data.forEach(function(d,i){var p3=pt(i,R*d[1]);mk('circle',{cx:p3[0],cy:p3[1],r:3.5,fill:'var(--accent)'})});
+  var lv=document.getElementById('lv');lv.textContent='';
+  data.forEach(function(d){
+    var div=document.createElement('div');var s=document.createElement('span');s.textContent=d[0];
+    var b=document.createElement('b');b.textContent=d[2];div.appendChild(s);div.appendChild(b);lv.appendChild(div);
+  });
+
+  /* ---------- MUZIK (Dikemaskini) ---------- */
+  var MAX_TRACKS=50;
+  var audio=document.getElementById('audio');
+  var playlistEl=document.getElementById('playlist');
+  var playlistCard=document.getElementById('playlist-card');
+  var trackName=document.getElementById('track-name');
+  var seek=document.getElementById('seek');
+  var curTimeEl=document.getElementById('cur-time');
+  var durTimeEl=document.getElementById('dur-time');
+  var btnPlay=document.getElementById('btn-play');
+  var playIcon=document.getElementById('play-icon');
+  var btnPrev=document.getElementById('btn-prev');
+  var btnNext=document.getElementById('btn-next');
+  var btnRepeat=document.getElementById('btn-repeat');
+  var repIcon=document.getElementById('rep-icon');
+  var volEl=document.getElementById('vol');
+
+  var tracks=[];
+  var idx=-1;
+  var repeatMode=0; // 0=off, 1=repeat one, 2=repeat all
+
+  function fmt(s){
+    if(!isFinite(s)||s<0)return '0:00';
+    var m=Math.floor(s/60),ss=Math.floor(s%60);
+    return m+':'+(ss<10?'0':'')+ss;
+  }
+
+  function renderPlaylist(){
+    playlistEl.textContent='';
+    if(tracks.length > 0){
+      playlistCard.style.display='block'; // Tunjuk playlist kalau ada lagu
+    } else {
+      playlistCard.style.display='none'; // Sembunyi kalau takde lagu, takde teks ugly
       return;
     }
-    fill.style.width = steps[si].p + '%';
-    ltext.textContent = steps[si].t;
-    si++;
-    setTimeout(tick, 380);
-  }
-  window.addEventListener('load', ()=>{ setTimeout(tick, 200); });
-  // fallback kalau load terlalu lama
-  setTimeout(()=>{
-    if(!loader.classList.contains('hide')){
-      fill.style.width = '100%';
-      ltext.textContent = 'Welcome';
-      setTimeout(()=>{
-        loader.classList.add('hide');
-        document.body.classList.remove('loading');
-      }, 400);
-    }
-  }, 3500);
 
-  /* ===== REVEAL ===== */
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('show');
-        io.unobserve(e.target);
-      }
+    tracks.forEach(function(t,i){
+      var li=document.createElement('li');
+      if(i===idx)li.className='on';
+      var nSpan=document.createElement('span');nSpan.className='n';nSpan.textContent=i+1;
+      var tSpan=document.createElement('span');tSpan.textContent=t.title;
+      li.appendChild(nSpan);li.appendChild(tSpan);
+      li.addEventListener('click',function(){loadTrack(i,true)});
+      playlistEl.appendChild(li);
     });
-  },{threshold:0.12});
-  document.querySelectorAll('.reveal').forEach((el,i)=>{
-    el.style.transitionDelay = (i*0.06)+'s';
-    io.observe(el);
+  }
+
+  function updatePlayIcon(){
+    playIcon.innerHTML='<use href="'+(audio.paused?'#play':'#pause')+'"/>';
+    btnPlay.setAttribute('aria-label',audio.paused?'Main':'Jeda');
+  }
+
+  function updateRepeatIcon(){
+    repIcon.innerHTML='<use href="'+(repeatMode===2?'#repeat1':(repeatMode===1?'#repeat1':'#repeat'))+'"/>';
+    btnRepeat.setAttribute('aria-label',repeatMode===0?'Ulangan: mati':(repeatMode===1?'Ulangan: satu lagu':'Ulangan: semua'));
+  }
+
+  function loadTrack(i,autoplay){
+    if(i<0||i>=tracks.length)return;
+    idx=i;
+    audio.src=tracks[i].src;
+    trackName.textContent=tracks[i].title;
+    seek.value=0;curTimeEl.textContent='0:00';durTimeEl.textContent='0:00';
+    renderPlaylist();
+    if(autoplay)audio.play().catch(function(){});
+  }
+
+  function nextTrack(){
+    if(!tracks.length)return;
+    var nxt=(idx+1)%tracks.length;
+    if(nxt===0&&repeatMode===0&&idx===tracks.length-1){audio.pause();audio.currentTime=0;updatePlayIcon();return;}
+    loadTrack(nxt,true);
+  }
+
+  function prevTrack(){
+    if(!tracks.length)return;
+    var prv=(idx-1+tracks.length)%tracks.length;
+    loadTrack(prv,true);
+  }
+
+  // Butang Play berfungsi sebagai Play/Stop (Pause)
+  btnPlay.addEventListener('click',function(){
+    if(!tracks.length)return;
+    if(idx<0){loadTrack(0,true);return;}
+    if(audio.paused)audio.play().catch(function(){});
+    else audio.pause(); // Pause/Stop
   });
 
-  /* ===== 3D TILT ===== */
-  const pic = document.getElementById('profile3d');
-  if(pic){
-    const parent = pic.parentElement;
-    parent.addEventListener('mousemove', e => {
-      const r = pic.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
-      const y = (e.clientY - r.top) / r.height - 0.5;
-      pic.style.transform = `rotateY(${x*24}deg) rotateX(${-y*24}deg) translateZ(0)`;
-    });
-    parent.addEventListener('mouseleave', () => {
-      pic.style.transform = 'rotateY(0) rotateX(0)';
-    });
-    parent.addEventListener('touchmove', e => {
-      const t = e.touches[0];
-      const r = pic.getBoundingClientRect();
-      const x = (t.clientX - r.left) / r.width - 0.5;
-      const y = (t.clientY - r.top) / r.height - 0.5;
-      pic.style.transform = `rotateY(${x*18}deg) rotateX(${-y*18}deg)`;
-    }, {passive:true});
-  }
+  btnPrev.addEventListener('click',prevTrack);
+  btnNext.addEventListener('click',nextTrack);
 
-  /* ===== TYPING ===== */
-  const phrases = [
-    "Coding • AI • Web Development",
-    "Turning ideas into reality.",
-    "Build. Break. Learn. Repeat."
-  ];
-  const el = document.getElementById('typed');
-  let pi = 0, ci = 0, deleting = false;
-  function type(){
-    const cur = phrases[pi];
-    if(!deleting){
-      el.textContent = cur.substring(0, ci++);
-      if(ci > cur.length){
-        deleting = true;
-        return setTimeout(type, 1600);
-      }
-      setTimeout(type, 70);
-    } else {
-      el.textContent = cur.substring(0, ci--);
-      if(ci < 0){
-        deleting = false;
-        pi = (pi + 1) % phrases.length;
-        ci = 0;
-        return setTimeout(type, 350);
-      }
-      setTimeout(type, 35);
-    }
-  }
-  type();
+  btnRepeat.addEventListener('click',function(){
+    repeatMode=(repeatMode+1)%3;
+    updateRepeatIcon();
+  });
 
-  /* ===== MUSIC + EQ + VOLUME ===== */
-  const music = document.getElementById('bgMusic');
-  const musicBtn = document.getElementById('musicBtn');
-  const musicIcon = document.getElementById('musicIcon');
-  const eq = document.getElementById('eq');
-  const volSlider = document.getElementById('volSlider');
+  audio.addEventListener('play',updatePlayIcon);
+  audio.addEventListener('pause',updatePlayIcon);
 
-  const iconPlay = `<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>`;
-  const iconPause = `<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>`;
+  audio.addEventListener('loadedmetadata',function(){
+    durTimeEl.textContent=fmt(audio.duration);
+  });
 
-  let userInteracted = false;
-  music.volume = 0.5;
-
-  function setPlaying(state){
-    if(state){
-      musicBtn.classList.add('playing');
-      eq.classList.add('active');
-      musicIcon.innerHTML = iconPause;
-    } else {
-      musicBtn.classList.remove('playing');
-      eq.classList.remove('active');
-      musicIcon.innerHTML = iconPlay;
-    }
-  }
-
-  musicBtn.addEventListener('click', () => {
-    userInteracted = true;
-    if(music.paused){
-      music.play().then(()=>setPlaying(true)).catch(()=>setPlaying(false));
-    } else {
-      music.pause();
-      setPlaying(false);
+  audio.addEventListener('timeupdate',function(){
+    if(audio.duration){
+      var pct2=(audio.currentTime/audio.duration)*100;
+      seek.value=pct2;
+      curTimeEl.textContent=fmt(audio.currentTime);
     }
   });
 
-  volSlider.addEventListener('input', (e)=>{
-    music.volume = parseFloat(e.target.value);
+  audio.addEventListener('ended',function(){
+    if(repeatMode===1){audio.currentTime=0;audio.play().catch(function(){});}
+    else if(repeatMode===2){nextTrack();}
+    else{nextTrack();}
   });
 
-  window.addEventListener('load', ()=>{
-    const p = music.play();
-    if(p && p.then){
-      p.then(()=>setPlaying(true)).catch(()=>setPlaying(false));
+  seek.addEventListener('input',function(){
+    if(audio.duration){
+      audio.currentTime=(seek.value/100)*audio.duration;
     }
   });
 
-  document.addEventListener('click', function once(){
-    if(!userInteracted && music.paused){
-      music.play().then(()=>setPlaying(true)).catch(()=>{});
+  volEl.addEventListener('input',function(){
+    audio.volume=volEl.value/100;
+  });
+  audio.volume=0.8;
+
+  /* Auto-detect lagu1.mp3, lagu2.mp3, … tanpa teks ugly */
+  async function detectTracks(){
+    var found=[];
+    for(var i=1;i<=MAX_TRACKS;i++){
+      var url='lagu'+i+'.mp3';
+      try{
+        var res=await fetch(url,{method:'HEAD',cache:'no-store'});
+        if(res.ok){found.push({title:'Lagu '+i,src:url});}
+        else{break;}
+      }catch(e){break;}
     }
-    document.removeEventListener('click', once);
-  }, {once:true});
-
-  /* ===== PARTICLES ===== */
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
-  let w, h, particles = [];
-
-  function resize(){
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const COUNT = Math.min(70, Math.floor(window.innerWidth / 20));
-  for(let i=0;i<COUNT;i++){
-    particles.push({
-      x: Math.random()*w,
-      y: Math.random()*h,
-      r: Math.random()*1.6 + 0.4,
-      vx: (Math.random()-0.5)*0.35,
-      vy: (Math.random()-0.5)*0.35,
-      a: Math.random()*0.5 + 0.15
-    });
+    tracks=found;
+    renderPlaylist();
+    if(tracks.length&&idx<0){trackName.textContent='Pilih lagu';}
   }
 
-  function draw(){
-    ctx.clearRect(0,0,w,h);
-    for(let i=0;i<particles.length;i++){
-      for(let j=i+1;j<particles.length;j++){
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const d = Math.hypot(dx,dy);
-        if(d < 130){
-          ctx.strokeStyle = `rgba(120,170,255,${(1 - d/130) * 0.14})`;
-          ctx.lineWidth = 0.6;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-    particles.forEach(p=>{
-      p.x += p.vx; p.y += p.vy;
-      if(p.x < 0 || p.x > w) p.vx *= -1;
-      if(p.y < 0 || p.y > h) p.vy *= -1;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.fillStyle = `rgba(255,255,255,${p.a})`;
-      ctx.shadowColor = 'rgba(120,170,255,0.9)';
-      ctx.shadowBlur = 10;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    });
-    requestAnimationFrame(draw);
-  }
-  draw();
+  detectTracks();
+  updateRepeatIcon();
+})();
 </script>
-
 </body>
-  </html>
+</html>
